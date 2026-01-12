@@ -247,7 +247,7 @@ class DiscordChatbot(Star):
             f"🎟️ AI Token 余额: {token_balance:,}\n"
         )
         
-        await event.plain_result(msg)
+        return event.plain_result(msg)
     
     @filter.command("chatbot_characters")
     async def cmd_characters(self, event: AstrMessageEvent):
@@ -271,7 +271,7 @@ class DiscordChatbot(Star):
             f"使用 `/chatbot_switch <角色名>` 切换角色"
         )
         
-        await event.plain_result(msg)
+        return event.plain_result(msg)
     
     @filter.command("chatbot_switch")
     async def cmd_switch(self, event: AstrMessageEvent, character: str = None):
@@ -281,8 +281,7 @@ class DiscordChatbot(Star):
             return
         
         if not character:
-            await event.plain_result("❌ 请指定角色名，如: `/chatbot_switch Nova`")
-            return
+            return event.plain_result("❌ 请指定角色名，如: `/chatbot_switch Nova`")
         
         success = character_manager.set_user_character(user_id, character)
         if success:
@@ -299,9 +298,9 @@ class DiscordChatbot(Star):
             except Exception as e:
                 logger.warning(f"更新对话 persona 失败: {e}")
             
-            await event.plain_result(f"✅ 已切换到角色: `{character}`")
+            return event.plain_result(f"✅ 已切换到角色: `{character}`")
         else:
-            await event.plain_result(f"❌ 角色 `{character}` 不存在")
+            return event.plain_result(f"❌ 角色 `{character}` 不存在")
     
     @filter.command("chatbot_clear")
     async def cmd_clear(self, event: AstrMessageEvent):
@@ -318,7 +317,7 @@ class DiscordChatbot(Star):
         except Exception as e:
             logger.warning(f"删除对话失败: {e}")
         
-        await event.plain_result("✅ 对话历史已清空")
+        return event.plain_result("✅ 对话历史已清空")
     
     @filter.command("chatbot_vote")
     async def cmd_vote(self, event: AstrMessageEvent):
@@ -374,7 +373,7 @@ class DiscordChatbot(Star):
             else:
                 msg += "请在 Top.gg 为我们投票！"
         
-        await event.plain_result(msg)
+        return event.plain_result(msg)
     
     @filter.command("chatbot_claim_vote")
     async def cmd_claim_vote(self, event: AstrMessageEvent):
@@ -389,8 +388,7 @@ class DiscordChatbot(Star):
             msg = "❌ 你还没有投票，无法领取奖励\n\n"
             if vote_url:
                 msg += f"👉 [点击这里投票]({vote_url})"
-            await event.plain_result(msg)
-            return
+            return event.plain_result(msg)
         
         # 检查是否已领取
         vote_info = topgg_webhook.get_vote_info(user_id)
@@ -403,8 +401,7 @@ class DiscordChatbot(Star):
                 last_vote = datetime.fromisoformat(last_vote_time)
                 last_reward = datetime.fromisoformat(last_reward_time)
                 if last_reward >= last_vote:
-                    await event.plain_result("⚠️ 你已经领取过本次投票奖励了，请下次投票后再来！")
-                    return
+                    return event.plain_result("⚠️ 你已经领取过本次投票奖励了，请下次投票后再来！")
             except Exception:
                 pass
         
@@ -425,7 +422,7 @@ class DiscordChatbot(Star):
         topgg_webhook._save_voted_users()
         
         weekend_bonus = " (周末双倍！)" if is_weekend else ""
-        await event.plain_result(
+        return event.plain_result(
             f"🎉 **投票奖励已领取！**{weekend_bonus}\n"
             f"━━━━━━━━━━━━━━━\n"
             f"🎟️ 获得: {reward_tokens:,} AI Tokens\n"
@@ -443,17 +440,16 @@ class DiscordChatbot(Star):
             return
         
         if not name or not prompt:
-            await event.plain_result(
+            return event.plain_result(
                 "❌ 用法: `/chatbot_create_char <名称> <prompt>`\n"
                 "例如: `/chatbot_create_char 小助手 你是一个友好的助手...`"
             )
-            return
         
         success, message = character_manager.create_custom_character(user_id, name, prompt)
         if success:
-            await event.plain_result(f"✅ {message}")
+            return event.plain_result(f"✅ {message}")
         else:
-            await event.plain_result(f"❌ {message}")
+            return event.plain_result(f"❌ {message}")
     
     @filter.command("chatbot_delete_char")
     async def cmd_delete_char(self, event: AstrMessageEvent, name: str = None):
@@ -463,14 +459,13 @@ class DiscordChatbot(Star):
             return
         
         if not name:
-            await event.plain_result("❌ 请指定要删除的角色名")
-            return
+            return event.plain_result("❌ 请指定要删除的角色名")
         
         success, message = character_manager.delete_custom_character(user_id, name)
         if success:
-            await event.plain_result(f"✅ {message}")
+            return event.plain_result(f"✅ {message}")
         else:
-            await event.plain_result(f"❌ {message}")
+            return event.plain_result(f"❌ {message}")
     
     @filter.command("chatbot_my_chars")
     async def cmd_my_chars(self, event: AstrMessageEvent):
@@ -482,16 +477,15 @@ class DiscordChatbot(Star):
         customs = character_manager.get_user_custom_characters(user_id)
         
         if not customs:
-            await event.plain_result(
+            return event.plain_result(
                 "📝 你还没有自定义角色\n"
                 f"使用 `/chatbot_create_char <名称> <prompt>` 创建\n"
                 f"最多可创建 {character_manager.max_custom_characters} 个"
             )
-            return
         
         char_list = "\n".join([f"• {name}" for name in customs.keys()])
         
-        await event.plain_result(
+        return event.plain_result(
             f"📝 **我的自定义角色** ({len(customs)}/{character_manager.max_custom_characters})\n"
             f"━━━━━━━━━━━━━━━\n"
             f"{char_list}"
