@@ -1,0 +1,35 @@
+# Discord Chatbot 插件配置
+
+# 免费消息配置
+free_messages:
+  daily_limit: 5  # 每天免费消息数量
+  reset_hour: 0   # 重置时间（UTC 小时）
+
+# 点赞奖励配置
+vote_reward:
+  tokens: 3000           # 点赞奖励 token 数量
+  expiry_hours: 12       # token 有效期（小时）
+
+# Top.gg 投票配置
+topgg:
+  enabled: true                    # 是否启用 Top.gg 投票功能
+  webhook_path: "/topgg/webhook"   # Webhook 路径
+  webhook_port: 8080               # Webhook 端口
+  webhook_auth: ""                 # Webhook 认证密钥（在 Top.gg 设置中配置）
+  bot_id: ""                       # Bot ID（用于 API 验证）
+  token: ""                        # Top.gg API Token（用于验证投票）
+  bot_url: "https://top.gg/bot/"   # 投票链接前缀
+
+# 角色系统配置
+character:
+  default: "Nova"        # 默认角色名称
+  max_custom_characters: 5  # 每用户最大自定义角色数
+
+# 对话配置
+conversation:
+  max_history: 10        # 最大对话历史条数
+  max_tokens_per_message: 4000  # 每条消息最大 token 数
+
+# Token 估算配置（用于计费）
+token_estimation:
+  chars_per_token: 4     # 每个 token 约等于多少字符

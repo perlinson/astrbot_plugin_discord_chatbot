@@ -1,0 +1,78 @@
+{
+  "free_messages": {
+    "description": "每日免费消息额度",
+    "type": "object",
+    "items": {
+      "daily_limit": {
+        "description": "每天免费消息数量",
+        "type": "int",
+        "default": 5
+      }
+    }
+  },
+  "vote_reward": {
+    "description": "投票奖励配置",
+    "type": "object",
+    "items": {
+      "tokens": {
+        "description": "投票奖励 Token 数量",
+        "type": "int",
+        "default": 3000
+      },
+      "expiry_hours": {
+        "description": "投票奖励有效期（小时）",
+        "type": "int",
+        "default": 12
+      }
+    }
+  },
+  "topgg": {
+    "description": "Top.gg 投票 Webhook 配置",
+    "type": "object",
+    "items": {
+      "enabled": {
+        "description": "是否启用 Top.gg Webhook",
+        "type": "bool",
+        "default": true
+      },
+      "webhook_path": {
+        "description": "Webhook 路径",
+        "type": "string",
+        "default": "/topgg/webhook"
+      },
+      "webhook_port": {
+        "description": "Webhook 端口",
+        "type": "int",
+        "default": 8080
+      },
+      "webhook_auth": {
+        "description": "Webhook Authorization 密钥",
+        "type": "string",
+        "obvious_hint": true,
+        "hint": "在 Top.gg Webhook 设置里配置的 Authorization，必须与这里一致。",
+        "default": ""
+      },
+      "bot_id": {
+        "description": "Top.gg Bot ID（用于生成投票链接）",
+        "type": "string",
+        "default": ""
+      }
+    }
+  },
+  "character": {
+    "description": "角色系统配置",
+    "type": "object",
+    "items": {
+      "default": {
+        "description": "默认角色名称",
+        "type": "string",
+        "default": "Nova"
+      },
+      "max_custom_characters": {
+        "description": "每个用户最多创建的自定义角色数量",
+        "type": "int",
+        "default": 5
+      }
+    }
+  }
+}
