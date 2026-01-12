@@ -1,5 +1,5 @@
 name: astrbot_plugin_discord_chatbot
 desc: Discord AI 聊天机器人插件，支持角色系统和 AI Token 计量
-version: 1.0.0
+version: 1.1.0
 author: perlinson
 repo: https://github.com/perlinson/astrbot_plugin_discord_chatbot
